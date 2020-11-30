@@ -2103,6 +2103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   controller: {fileID: 0}
+  velocityAnimationScaleFactor: 0.3
 --- !u!1001 &484655723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8114,7 +8115,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1709708290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.409, z: 0}
+  m_LocalPosition: {x: 0, y: 0.596, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1681673981}
@@ -8176,6 +8177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 95048635149555134}
   controller: {fileID: 0}
+  velocityAnimationScaleFactor: 0.3
 --- !u!1001 &1720249773
 PrefabInstance:
   m_ObjectHideFlags: 0
