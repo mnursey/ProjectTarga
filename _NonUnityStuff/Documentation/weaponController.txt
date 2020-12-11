@@ -1,0 +1,10 @@
+WeaponController
+
+TotalAmmunition
+TotalAmmunitionCarry
+MagSize
+BulletsInMag
+ReloadTime
+Rate of fire (exclude reload)
+MuzzleTransform
+DamageCurve
