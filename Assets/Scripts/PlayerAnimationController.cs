@@ -8,6 +8,11 @@ public class PlayerAnimationController : MonoBehaviour
     public CharacterController controller;
     public float velocityAnimationScaleFactor = 0.4f;
 
+    float currentVelX;
+    float currentVelZ;
+
+    public float velocityChangeRate = 0.3f;
+
     void Awake()
     {
         if(anim == null) anim = GetComponent<Animator>();
@@ -24,7 +29,11 @@ public class PlayerAnimationController : MonoBehaviour
     void Update()
     {
         Vector3 localVelocity = transform.InverseTransformDirection(controller.velocity);
-        anim.SetFloat("VelocityX", localVelocity.x * velocityAnimationScaleFactor);
-        anim.SetFloat("VelocityZ", localVelocity.z * velocityAnimationScaleFactor);
+
+        currentVelX = Mathf.MoveTowards(currentVelX, localVelocity.x * velocityAnimationScaleFactor, velocityChangeRate);
+        currentVelZ = Mathf.MoveTowards(currentVelZ, localVelocity.z * velocityAnimationScaleFactor, velocityChangeRate);
+
+        anim.SetFloat("VelocityX", currentVelX);
+        anim.SetFloat("VelocityZ", currentVelZ);
     }
 }
