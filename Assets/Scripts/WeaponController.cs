@@ -116,6 +116,7 @@ public class WeaponController : MonoBehaviour
             Debug.DrawRay(c.transform.position, c.transform.forward * hit.distance, Color.yellow);
 
             lr.SetPositions(new Vector3[] { Vector3.zero, Vector3.forward * hit.distance });
+            lr.gameObject.transform.LookAt(hit.point);
         }
         else
         {
