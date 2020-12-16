@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class WeaponController : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class WeaponController : MonoBehaviour
 
     Camera c;
     public LineRenderer lr;
+    public VisualEffect muzzleFlash;
 
     public float bulletTrailFadeOut = 0.002f;
     public float bulletTrailFadeOutTimer = 0.0f;
@@ -39,6 +41,7 @@ public class WeaponController : MonoBehaviour
     {
         c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         lr.enabled = false;
+        muzzleFlash = GetComponentInChildren<VisualEffect>();
     }
 
     void Update()
@@ -128,6 +131,8 @@ public class WeaponController : MonoBehaviour
         }
 
         recoilAcceleration -= recoilForce;
+
+        muzzleFlash.Play();
     }
 
     void UpdateRecoil()
