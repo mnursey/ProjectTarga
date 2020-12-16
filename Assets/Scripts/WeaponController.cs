@@ -29,6 +29,12 @@ public class WeaponController : MonoBehaviour
     public float bulletTrailFadeOut = 0.002f;
     public float bulletTrailFadeOutTimer = 0.0f;
 
+    public float recoilForce = 0.01f;
+    public float recoilAcceleration = 0.0f;
+    public float recoilReturnForce = 0.0f;
+    public float maxRecoilAcceleration = -5f;
+    public float recoilReturnForceNotShooting = 0.0f;
+
     void Awake()
     {
         c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -49,6 +55,7 @@ public class WeaponController : MonoBehaviour
 
     void FixedUpdate()
     {
+        UpdateRecoil();
 
         if (PressedReload() && CouldReload())
         {
@@ -101,11 +108,6 @@ public class WeaponController : MonoBehaviour
         fireTimer = 60f / rateOfFire;
         bulletsInMag -= 1;
 
-        // Todo
-        // Shoot
-        // Raycast
-        // Particle effect
-
         lr.positionCount = 2;
         lr.enabled = true;
         bulletTrailFadeOutTimer = bulletTrailFadeOut;
@@ -124,6 +126,21 @@ public class WeaponController : MonoBehaviour
 
             lr.SetPositions(new Vector3[] { Vector3.zero, Vector3.forward * 1000.0f });
         }
+
+        recoilAcceleration -= recoilForce;
+    }
+
+    void UpdateRecoil()
+    {
+        recoilAcceleration = Mathf.Clamp(recoilAcceleration, maxRecoilAcceleration, 0.0f);
+        recoilAcceleration = Mathf.MoveTowards(recoilAcceleration, 0.0f, recoilReturnForce * Time.deltaTime);
+
+        if(!PressedShoot())
+        {
+            recoilAcceleration = Mathf.MoveTowards(recoilAcceleration, 0.0f, recoilReturnForceNotShooting * Time.deltaTime);
+        }
+
+        transform.parent.GetComponent<MouseLook>().xRotation += recoilAcceleration * Time.deltaTime;
     }
 
     void Reload()

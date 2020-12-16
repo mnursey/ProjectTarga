@@ -2483,6 +2483,11 @@ MonoBehaviour:
   lr: {fileID: 1862552565}
   bulletTrailFadeOut: 0.03
   bulletTrailFadeOutTimer: 0
+  recoilForce: 15
+  recoilAcceleration: 0
+  recoilReturnForce: 25
+  maxRecoilAcceleration: -30
+  recoilReturnForceNotShooting: 160
 --- !u!1 &236117225
 GameObject:
   m_ObjectHideFlags: 0
@@ -15608,6 +15613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
   playerBody: {fileID: 1709708291}
+  xRotation: 0
 --- !u!1001 &1683543122
 PrefabInstance:
   m_ObjectHideFlags: 0
