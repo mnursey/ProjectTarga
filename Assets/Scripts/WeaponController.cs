@@ -27,6 +27,7 @@ public class WeaponController : MonoBehaviour
     Camera c;
     public LineRenderer lr;
     public VisualEffect muzzleFlash;
+    public Light muzzleFlashLight;
 
     public float bulletTrailFadeOut = 0.002f;
     public float bulletTrailFadeOutTimer = 0.0f;
@@ -42,6 +43,8 @@ public class WeaponController : MonoBehaviour
         c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         lr.enabled = false;
         muzzleFlash = GetComponentInChildren<VisualEffect>();
+        muzzleFlashLight = GetComponentInChildren<Light>();
+        muzzleFlashLight.enabled = false;
     }
 
     void Update()
@@ -49,9 +52,11 @@ public class WeaponController : MonoBehaviour
         if(bulletTrailFadeOutTimer <= 0f)
         {
             lr.enabled = false;
+            muzzleFlashLight.enabled = false;
         } else
         {
             lr.enabled = true;
+            muzzleFlashLight.enabled = true;
             bulletTrailFadeOutTimer -= Time.deltaTime;
         }
     }
@@ -133,6 +138,7 @@ public class WeaponController : MonoBehaviour
         recoilAcceleration -= recoilForce;
 
         muzzleFlash.Play();
+        muzzleFlashLight.enabled = true;
     }
 
     void UpdateRecoil()
