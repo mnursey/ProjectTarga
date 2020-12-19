@@ -2923,7 +2923,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   bulletMask:
     serializedVersion: 2
-    m_Bits: 2561
+    m_Bits: 6657
   cameraShake: {fileID: 0}
   lr: {fileID: 1862552565}
   muzzleFlash: {fileID: 0}
@@ -2976,6 +2976,33 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   knockBackDuration: 0.15
+  coneOfFireCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: Infinity
+      outSlope: 0.08
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.08
+      inSlope: 0.0031317563
+      outSlope: 0
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.15771875
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  weaponStability: 0
+  bulletStabilityIncrease: 0.15
+  stabilityNormalization: 0.7
 --- !u!1 &236117225
 GameObject:
   m_ObjectHideFlags: 0
@@ -21029,7 +21056,7 @@ GameObject:
   - component: {fileID: 1709708292}
   - component: {fileID: 1709708293}
   - component: {fileID: 1709708294}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}

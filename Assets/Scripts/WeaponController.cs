@@ -45,6 +45,14 @@ public class WeaponController : MonoBehaviour
     public AnimationCurve knockBackCurve;
     public float knockBackDuration = 0.15f;
 
+    [Header("Cone of Fire")]
+
+    public AnimationCurve coneOfFireCurve;
+    [Range(0.0f, 1.0f)]
+    public float weaponStability = 0.0f;
+    public float bulletStabilityIncrease = 0.15f;
+    public float stabilityNormalization = 0.10f;
+
     void Awake()
     {
         c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -67,6 +75,8 @@ public class WeaponController : MonoBehaviour
             muzzleFlashLight.enabled = true;
             bulletTrailFadeOutTimer -= Time.deltaTime;
         }
+
+        weaponStability = Mathf.MoveTowards(weaponStability, 0.0f, stabilityNormalization * Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -126,19 +136,22 @@ public class WeaponController : MonoBehaviour
         lr.enabled = true;
         bulletTrailFadeOutTimer = bulletTrailFadeOut;
 
-        RaycastHit hit;
-        if (Physics.Raycast(c.transform.position, c.transform.forward, out hit, 1000.0f, bulletMask))
-        {
-            Debug.DrawRay(c.transform.position, c.transform.forward * hit.distance, Color.yellow);
+        Vector3 coneOffset = Random.insideUnitSphere * coneOfFireCurve.Evaluate(weaponStability);
 
-            lr.SetPositions(new Vector3[] { Vector3.zero, Vector3.forward * hit.distance });
-            lr.gameObject.transform.LookAt(hit.point);
+        Vector3 shotDirection = (c.transform.forward + coneOffset).normalized;
+
+        RaycastHit hit;
+        if (Physics.Raycast(c.transform.position, shotDirection, out hit, 1000.0f, bulletMask))
+        {
+            Debug.DrawRay(c.transform.position, shotDirection * hit.distance, Color.yellow);
+
+            lr.SetPositions(new Vector3[] { Vector3.zero, lr.transform.InverseTransformPoint(hit.point)});
         }
         else
         {
-            Debug.DrawRay(c.transform.position, c.transform.forward * 1000.0f, Color.red);
+            Debug.DrawRay(c.transform.position, shotDirection * 1000.0f, Color.red);
 
-            lr.SetPositions(new Vector3[] { Vector3.zero, Vector3.forward * 1000.0f });
+            lr.SetPositions(new Vector3[] { Vector3.zero, lr.transform.InverseTransformPoint(shotDirection * 1000.0f) });
         }
 
         muzzleFlash.Play();
@@ -147,6 +160,8 @@ public class WeaponController : MonoBehaviour
         StartCoroutine(cameraShake.Shake(shakeDuration, shakeStrength));
         StartCoroutine(cameraShake.KnockBack(knockBackDuration, knockBackCurve));
 
+        weaponStability += bulletStabilityIncrease;
+        weaponStability = Mathf.Clamp01(weaponStability);
     }
 
     void Reload()
