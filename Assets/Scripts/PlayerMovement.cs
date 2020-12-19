@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerMovementMode { Player, Puppet, None };
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
@@ -18,9 +19,70 @@ public class PlayerMovement : MonoBehaviour
 
     public float jumpHeight = 3f;
 
+    public PlayerMovementMode mode;
+
+    // Inputs
+    public float x;
+    public float z;
+    public bool jump;
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+    }
+
+    float GetXInput()
+    {
+        float value = 0.0f;
+
+        switch(mode)
+        {
+            case PlayerMovementMode.Player:
+                value = Input.GetAxis("Horizontal");
+                break;
+
+            case PlayerMovementMode.Puppet:
+                value = x;
+                break;
+        }
+
+        return value;
+    }
+
+    float GetYInput()
+    {
+        float value = 0.0f;
+
+        switch (mode)
+        {
+            case PlayerMovementMode.Player:
+                value = Input.GetAxis("Vertical");
+                break;
+
+            case PlayerMovementMode.Puppet:
+                value = z;
+                break;
+        }
+
+        return value;
+    }
+
+    bool GetJumpInput()
+    {
+        bool value = false;
+
+        switch (mode)
+        {
+            case PlayerMovementMode.Player:
+                value = Input.GetButtonDown("Jump");
+                break;
+
+            case PlayerMovementMode.Puppet:
+                value = jump;
+                break;
+        }
+
+        return value;
     }
 
     // Update is called once per frame
@@ -30,8 +92,9 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        x = GetXInput();
+        z = GetYInput();
+        jump = GetJumpInput();
 
         // X, Z movement
         Vector3 move = transform.right * x + transform.forward * z;
@@ -50,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Jump
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if(jump && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }

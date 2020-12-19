@@ -5,6 +5,7 @@ using UnityEngine.VFX;
 
 public class WeaponController : MonoBehaviour
 {
+    [Header("Stats")]
 
     public int spareAmmunition = 100;
     public int maxSpareAmmunition = 150;
@@ -18,25 +19,31 @@ public class WeaponController : MonoBehaviour
     public float rateOfFire = 200;
     public float fireTimer = 0.0f;
 
-    public Transform muzzleTransform;
-
     public AnimationCurve damageCurve;
 
     public LayerMask bulletMask;
 
+    [Header("References")]
+
     Camera c;
+    public CameraShake cameraShake;
     public LineRenderer lr;
     public VisualEffect muzzleFlash;
     public Light muzzleFlashLight;
+    public Transform muzzleTransform;
+
+    [Header("Bullet Trail")]
 
     public float bulletTrailFadeOut = 0.002f;
     public float bulletTrailFadeOutTimer = 0.0f;
 
-    public float recoilForce = 0.01f;
-    public float recoilAcceleration = 0.0f;
-    public float recoilReturnForce = 0.0f;
-    public float maxRecoilAcceleration = -5f;
-    public float recoilReturnForceNotShooting = 0.0f;
+    [Header("Camera Shake")]
+
+    public float shakeDuration = 0.15f;
+    public float shakeStrength = 0.1f;
+
+    public AnimationCurve knockBackCurve;
+    public float knockBackDuration = 0.15f;
 
     void Awake()
     {
@@ -45,6 +52,7 @@ public class WeaponController : MonoBehaviour
         muzzleFlash = GetComponentInChildren<VisualEffect>();
         muzzleFlashLight = GetComponentInChildren<Light>();
         muzzleFlashLight.enabled = false;
+        cameraShake = c.GetComponent<CameraShake>();
     }
 
     void Update()
@@ -63,8 +71,6 @@ public class WeaponController : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateRecoil();
-
         if (PressedReload() && CouldReload())
         {
             Reload();
@@ -135,23 +141,12 @@ public class WeaponController : MonoBehaviour
             lr.SetPositions(new Vector3[] { Vector3.zero, Vector3.forward * 1000.0f });
         }
 
-        recoilAcceleration -= recoilForce;
-
         muzzleFlash.Play();
         muzzleFlashLight.enabled = true;
-    }
 
-    void UpdateRecoil()
-    {
-        recoilAcceleration = Mathf.Clamp(recoilAcceleration, maxRecoilAcceleration, 0.0f);
-        recoilAcceleration = Mathf.MoveTowards(recoilAcceleration, 0.0f, recoilReturnForce * Time.deltaTime);
+        StartCoroutine(cameraShake.Shake(shakeDuration, shakeStrength));
+        StartCoroutine(cameraShake.KnockBack(knockBackDuration, knockBackCurve));
 
-        if(!PressedShoot())
-        {
-            recoilAcceleration = Mathf.MoveTowards(recoilAcceleration, 0.0f, recoilReturnForceNotShooting * Time.deltaTime);
-        }
-
-        transform.parent.GetComponent<MouseLook>().xRotation += recoilAcceleration * Time.deltaTime;
     }
 
     void Reload()
@@ -165,7 +160,7 @@ public class WeaponController : MonoBehaviour
     void FinishReload()
     {
         // Todo
-        bulletsInMag += magSize;
+        bulletsInMag = magSize;
     }
 
     bool PressedShoot()
