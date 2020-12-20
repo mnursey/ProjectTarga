@@ -31,6 +31,7 @@ public class WeaponController : MonoBehaviour
     public VisualEffect muzzleFlash;
     public Light muzzleFlashLight;
     public Transform muzzleTransform;
+    public Animator anim;
 
     [Header("Bullet Trail")]
 
@@ -61,6 +62,7 @@ public class WeaponController : MonoBehaviour
         muzzleFlashLight = GetComponentInChildren<Light>();
         muzzleFlashLight.enabled = false;
         cameraShake = c.GetComponent<CameraShake>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -162,14 +164,14 @@ public class WeaponController : MonoBehaviour
 
         weaponStability += bulletStabilityIncrease;
         weaponStability = Mathf.Clamp01(weaponStability);
+
+        anim.SetTrigger("Shoot");
     }
 
     void Reload()
     {
         reloadTimer = reloadTime;
-
-        // Todo
-        // Trigger animation
+        anim.SetTrigger("Reload");
     }
 
     void FinishReload()
