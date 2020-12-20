@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
+public enum WeaponControllerMode { Player, Puppet };
+
 public class WeaponController : MonoBehaviour
 {
+    public WeaponControllerMode mode = WeaponControllerMode.Puppet;
+
     [Header("Stats")]
 
     public int spareAmmunition = 100;
@@ -63,6 +67,12 @@ public class WeaponController : MonoBehaviour
         muzzleFlashLight.enabled = false;
         cameraShake = c.GetComponent<CameraShake>();
         anim = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        GameUIController.UpdateClipAmmo(bulletsInMag);
+        GameUIController.UpdateSpareAmmo(spareAmmunition);
     }
 
     void Update()
@@ -159,13 +169,17 @@ public class WeaponController : MonoBehaviour
         muzzleFlash.Play();
         muzzleFlashLight.enabled = true;
 
-        StartCoroutine(cameraShake.Shake(shakeDuration, shakeStrength));
-        StartCoroutine(cameraShake.KnockBack(knockBackDuration, knockBackCurve));
-
         weaponStability += bulletStabilityIncrease;
         weaponStability = Mathf.Clamp01(weaponStability);
 
         anim.SetTrigger("Shoot");
+
+        if (IsPlayer())
+        {
+            StartCoroutine(cameraShake.Shake(shakeDuration, shakeStrength));
+            StartCoroutine(cameraShake.KnockBack(knockBackDuration, knockBackCurve));
+            GameUIController.UpdateClipAmmo(bulletsInMag);
+        }
     }
 
     void Reload()
@@ -176,8 +190,15 @@ public class WeaponController : MonoBehaviour
 
     void FinishReload()
     {
-        // Todo
-        bulletsInMag = magSize;
+        int numBulletsAdded = Mathf.Min(magSize, spareAmmunition) - bulletsInMag;
+        spareAmmunition -= numBulletsAdded;
+        bulletsInMag += numBulletsAdded;
+
+        if(IsPlayer())
+        {
+            GameUIController.UpdateClipAmmo(bulletsInMag);
+            GameUIController.UpdateSpareAmmo(spareAmmunition);
+        }
     }
 
     bool PressedShoot()
@@ -198,5 +219,10 @@ public class WeaponController : MonoBehaviour
         }
 
         return false;
+    }
+
+    bool IsPlayer()
+    {
+        return mode == WeaponControllerMode.Player;
     }
 }
