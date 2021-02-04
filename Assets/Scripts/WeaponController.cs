@@ -93,6 +93,11 @@ public class WeaponController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(PressedPickup())
+        {
+            PickUp();
+        }
+
         if (PressedReload() && CouldReload())
         {
             Reload();
@@ -182,6 +187,27 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    void PickUp()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(c.transform.position, transform.forward, out hit, 1000.0f, bulletMask))
+        {
+            Debug.DrawRay(c.transform.position, transform.forward * hit.distance, Color.cyan);
+
+            AmmoPickup am = hit.transform.GetComponent<AmmoPickup>();
+
+            if(am != null)
+            {
+                spareAmmunition += am.Pickup();
+                GameUIController.UpdateSpareAmmo(spareAmmunition);
+            }
+        }
+        else
+        {
+            Debug.DrawRay(c.transform.position, transform.forward * 1000.0f, Color.blue);
+        }
+    }
+
     void Reload()
     {
         reloadTimer = reloadTime;
@@ -204,6 +230,16 @@ public class WeaponController : MonoBehaviour
     bool PressedShoot()
     {
         if (Input.GetButton("Fire1"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool PressedPickup()
+    {
+        if (Input.GetButton("Pickup"))
         {
             return true;
         }
