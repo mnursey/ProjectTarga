@@ -163,6 +163,15 @@ public class WeaponController : MonoBehaviour
             Debug.DrawRay(c.transform.position, shotDirection * hit.distance, Color.yellow);
 
             lr.SetPositions(new Vector3[] { Vector3.zero, lr.transform.InverseTransformPoint(hit.point)});
+
+            Health h = hit.transform.GetComponent<Health>();
+
+            if(h != null)
+            {
+                int dmg = (int)damageCurve.Evaluate(hit.distance);
+                h.Damage(dmg);
+                Debug.Log(dmg);
+            }
         }
         else
         {
@@ -229,7 +238,7 @@ public class WeaponController : MonoBehaviour
 
     bool PressedShoot()
     {
-        if (Input.GetButton("Fire1"))
+        if (IsPlayer() && Input.GetButton("Fire1"))
         {
             return true;
         }
@@ -239,7 +248,7 @@ public class WeaponController : MonoBehaviour
 
     bool PressedPickup()
     {
-        if (Input.GetButton("Pickup"))
+        if (IsPlayer() && Input.GetButton("Pickup"))
         {
             return true;
         }
@@ -249,7 +258,7 @@ public class WeaponController : MonoBehaviour
 
     bool PressedReload()
     {
-        if (Input.GetButtonDown("Reload"))
+        if (IsPlayer() && Input.GetButtonDown("Reload"))
         {
             return true;
         }
