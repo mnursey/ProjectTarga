@@ -17641,6 +17641,8 @@ MonoBehaviour:
   viewRadius: 20
   maxIntrestArea: 75
   lookAtSpeed: 275
+  lowerTargetRange: 5
+  upperTargetRange: 10
   target: {fileID: 0}
   lookHolder: {fileID: 194569564}
   heightYAimOffset: 0.6

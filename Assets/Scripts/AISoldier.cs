@@ -13,16 +13,21 @@ public class AISoldier : MonoBehaviour
     public float maxIntrestArea = 75f;
     public float lookAtSpeed = 300f;
 
+    public float lowerTargetRange = 5f;
+    public float upperTargetRange = 15f;
+
     public GameObject target = null;
     public GameObject lookHolder;
 
     public float heightYAimOffset = 1.6f;
 
     TeamTracker teamTracker;
+    PlayerMovement playerMovement;
 
     private void Awake()
     {
         teamTracker = GetComponent<TeamTracker>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     // Start is called before the first frame updatel
@@ -50,6 +55,14 @@ public class AISoldier : MonoBehaviour
                     if (Vector3.Distance(target.transform.position, transform.position) > maxIntrestArea)
                     {
                         target = null;
+                    }
+
+                    if (Vector3.Distance(target.transform.position, transform.position) < lowerTargetRange) {
+                        MoveBackwards();
+                    } else if ((Vector3.Distance(target.transform.position, transform.position) > upperTargetRange)) {
+                        MoveForwards();
+                    } else {
+                        StandStill();
                     }
                 }
 
@@ -87,5 +100,22 @@ public class AISoldier : MonoBehaviour
 
         lookHolder.transform.localRotation = Quaternion.RotateTowards(lookHolder.transform.localRotation, Quaternion.LookRotation(lookDirY, Vector3.up), lookAtSpeed * Time.deltaTime);
         lookHolder.transform.localEulerAngles = new Vector3(lookHolder.transform.localEulerAngles.x, 0f, 0f);
+    }
+
+    void MoveBackwards()
+    {
+        playerMovement.z -= 1.0f;
+    }
+
+    void MoveForwards()
+    {
+        playerMovement.z += 1.0f;
+    }
+
+    void StandStill()
+    {
+        playerMovement.x = 0.0f;
+        playerMovement.z = 0.0f;
+        playerMovement.jump = false;
     }
 }
