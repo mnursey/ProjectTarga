@@ -16,6 +16,8 @@ public class AISoldier : MonoBehaviour
     public float lowerTargetRange = 5f;
     public float upperTargetRange = 15f;
 
+    public float maximumAttackRange = 20f;
+
     public GameObject target = null;
     public GameObject lookHolder;
 
@@ -23,11 +25,13 @@ public class AISoldier : MonoBehaviour
 
     TeamTracker teamTracker;
     PlayerMovement playerMovement;
+    WeaponController weaponController;
 
     private void Awake()
     {
         teamTracker = GetComponent<TeamTracker>();
         playerMovement = GetComponent<PlayerMovement>();
+        weaponController = GetComponentInChildren<WeaponController>();
     }
 
     // Start is called before the first frame updatel
@@ -63,6 +67,14 @@ public class AISoldier : MonoBehaviour
                         MoveForwards();
                     } else {
                         StandStill();
+                    }
+
+                    if(Vector3.Distance(target.transform.position, transform.position) < maximumAttackRange)
+                    {
+                        Fire();
+                    } else
+                    {
+                        IdleGun();
                     }
                 }
 
@@ -117,5 +129,24 @@ public class AISoldier : MonoBehaviour
         playerMovement.x = 0.0f;
         playerMovement.z = 0.0f;
         playerMovement.jump = false;
+    }
+
+    void Fire()
+    {
+        if(weaponController.bulletsInMag > 0)
+        {
+            weaponController.fire = true;
+            weaponController.reload = false;
+        }
+        else
+        {
+            weaponController.fire = false;
+            weaponController.reload = true;
+        }
+    }
+    void IdleGun()
+    {
+        weaponController.fire = false;
+        weaponController.reload = false;
     }
 }

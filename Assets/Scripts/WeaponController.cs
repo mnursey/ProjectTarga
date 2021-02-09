@@ -9,6 +9,11 @@ public class WeaponController : MonoBehaviour
 {
     public WeaponControllerMode mode = WeaponControllerMode.Puppet;
 
+    [Header("Input")]
+
+    public bool fire = false;
+    public bool reload = false;
+
     [Header("Stats")]
 
     public int spareAmmunition = 100;
@@ -67,6 +72,7 @@ public class WeaponController : MonoBehaviour
         muzzleFlashLight.enabled = false;
         cameraShake = c.GetComponent<CameraShake>();
         anim = GetComponent<Animator>();
+        lr = GetComponentInChildren<LineRenderer>();
     }
 
     private void Start()
@@ -155,12 +161,22 @@ public class WeaponController : MonoBehaviour
 
         Vector3 coneOffset = Random.insideUnitSphere * coneOfFireCurve.Evaluate(weaponStability);
 
-        Vector3 shotDirection = (c.transform.forward + coneOffset).normalized;
+        Transform shotCenter;
+
+        if(IsPlayer())
+        {
+            shotCenter = c.transform;
+        } else
+        {
+            shotCenter = transform;
+        }
+
+        Vector3 shotDirection = (shotCenter.forward + coneOffset).normalized;
 
         RaycastHit hit;
-        if (Physics.Raycast(c.transform.position, shotDirection, out hit, 1000.0f, bulletMask))
+        if (Physics.Raycast(shotCenter.position, shotDirection, out hit, 1000.0f, bulletMask))
         {
-            Debug.DrawRay(c.transform.position, shotDirection * hit.distance, Color.yellow);
+            Debug.DrawRay(shotCenter.position, shotDirection * hit.distance, Color.yellow);
 
             lr.SetPositions(new Vector3[] { Vector3.zero, lr.transform.InverseTransformPoint(hit.point)});
 
@@ -175,7 +191,7 @@ public class WeaponController : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(c.transform.position, shotDirection * 1000.0f, Color.red);
+            Debug.DrawRay(shotCenter.position, shotDirection * 1000.0f, Color.red);
 
             lr.SetPositions(new Vector3[] { Vector3.zero, lr.transform.InverseTransformPoint(shotDirection * 1000.0f) });
         }
@@ -234,6 +250,11 @@ public class WeaponController : MonoBehaviour
             GameUIController.UpdateClipAmmo(bulletsInMag);
             GameUIController.UpdateSpareAmmo(spareAmmunition);
         }
+        else
+        {
+            // Unlimited Ammo for AI
+            spareAmmunition += numBulletsAdded;
+        }
     }
 
     bool PressedShoot()
@@ -241,6 +262,13 @@ public class WeaponController : MonoBehaviour
         if (IsPlayer() && Input.GetButton("Fire1"))
         {
             return true;
+        }
+        else
+        {
+            if(fire)
+            {
+                return true;
+            }
         }
 
         return false;
@@ -261,6 +289,13 @@ public class WeaponController : MonoBehaviour
         if (IsPlayer() && Input.GetButtonDown("Reload"))
         {
             return true;
+        }
+        else
+        {
+            if (reload)
+            {
+                return true;
+            }
         }
 
         return false;
