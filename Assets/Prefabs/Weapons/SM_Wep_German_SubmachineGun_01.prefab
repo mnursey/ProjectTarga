@@ -620,7 +620,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   bulletMask:
     serializedVersion: 2
-    m_Bits: 6657
+    m_Bits: 14849
   cameraShake: {fileID: 0}
   lr: {fileID: 1862552565}
   muzzleFlash: {fileID: 0}
