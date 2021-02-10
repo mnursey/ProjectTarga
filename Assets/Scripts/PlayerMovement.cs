@@ -6,6 +6,7 @@ public enum PlayerMovementMode { Player, Puppet, None };
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+    Health health;
 
     public float speed = 12f;
     public float gravity = -9.81f;
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+        health = GetComponent<Health>();
     }
 
     float GetXInput()

@@ -8637,6 +8637,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstFrequency
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstValue
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4620352481340101455, guid: cfae930c30b4f5a46936e74b31e49147,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -19217,6 +19227,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstFrequency
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstValue
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4620352481340101455, guid: cfae930c30b4f5a46936e74b31e49147,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -19236,6 +19256,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620352482696230962, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4620352482786196235, guid: cfae930c30b4f5a46936e74b31e49147,
         type: 3}
@@ -24264,6 +24289,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstFrequency
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620352480917436441, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: burstValue
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4620352481087950568, guid: cfae930c30b4f5a46936e74b31e49147,
         type: 3}
       propertyPath: m_IsActive
@@ -24283,6 +24318,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620352482696230962, guid: cfae930c30b4f5a46936e74b31e49147,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4620352482786196235, guid: cfae930c30b4f5a46936e74b31e49147,
         type: 3}

@@ -18,6 +18,10 @@ public class AISoldier : MonoBehaviour
 
     public float maximumAttackRange = 20f;
 
+    public float burstValue = 0.9f;
+    public float burstFrequency = 1f;
+    float burstOffset = 0.0f;
+
     public GameObject target = null;
     public GameObject lookHolder;
 
@@ -26,12 +30,16 @@ public class AISoldier : MonoBehaviour
     TeamTracker teamTracker;
     PlayerMovement playerMovement;
     WeaponController weaponController;
+    Health health;
 
     private void Awake()
     {
         teamTracker = GetComponent<TeamTracker>();
         playerMovement = GetComponent<PlayerMovement>();
         weaponController = GetComponentInChildren<WeaponController>();
+        health = GetComponent<Health>();
+        health.OnDeathSubscribe(OnDead);
+        burstOffset = Random.Range(0.0f, 100f);
     }
 
     // Start is called before the first frame updatel
@@ -69,16 +77,34 @@ public class AISoldier : MonoBehaviour
                         StandStill();
                     }
 
-                    if(Vector3.Distance(target.transform.position, transform.position) < maximumAttackRange)
+                    if(CanBurst() && Vector3.Distance(target.transform.position, transform.position) < maximumAttackRange)
                     {
                         Fire();
                     } else
                     {
-                        IdleGun();
+                        if (weaponController.bulletsInMag < (weaponController.magSize / 3.0f))
+                        {
+                            Reload();
+                        }
+                        else
+                        {
+                            IdleGun();
+                        }
                     }
                 }
 
                 break;
+        }
+    }
+
+    bool CanBurst()
+    {
+        if(Mathf.Sin((Time.time * burstFrequency) + burstOffset) > burstValue)
+        {
+            return true;
+        } else
+        {
+            return false;
         }
     }
 
@@ -140,13 +166,23 @@ public class AISoldier : MonoBehaviour
         }
         else
         {
-            weaponController.fire = false;
-            weaponController.reload = true;
+            Reload();
         }
+    }
+
+    void Reload()
+    {
+        weaponController.fire = false;
+        weaponController.reload = true;
     }
     void IdleGun()
     {
         weaponController.fire = false;
         weaponController.reload = false;
+    }
+
+    void OnDead()
+    {
+        gameObject.SetActive(false);
     }
 }
